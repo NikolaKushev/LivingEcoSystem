@@ -49,16 +49,26 @@ public class EcoSystemService {
         addCarnivore(cheetah);
         addCarnivore(tiger);
         addCarnivore(hyena);
+
+        addHerbivoreToGroup(zebra);
+        addHerbivoreToGroup(gazelle);
+        addHerbivoreToGroup(buffallo);
+
+        addCarnivoreToGroup(lion);
+        addCarnivoreToGroup(hyena);
     }
 
     public void simulate() {
         makeEcoSystem();
 
         while (true) {
+
+            if (herbivoreRepository.getHerbivoresList().size() == 0) {
+                break;
+            }
+
             Animal herbivore = herbivoreRepository.getHerbivoresList().get(new Random().nextInt(herbivoreRepository.getHerbivoresList().size()));
             Animal carnivore = carnivoreRepository.getCarnivoresList().get(new Random().nextInt(carnivoreRepository.getCarnivoresList().size()));
-
-            makeGroup(herbivore, carnivore);
 
             double successChance = calculateSuccessChanceForAttack(herbivore, carnivore);
 
@@ -68,19 +78,34 @@ public class EcoSystemService {
 
             if (successChance > randomSuccessChance) {
                 attack(herbivore, carnivore);
+            } else {
+                increaseHungerRate(carnivore);
             }
 
             removeCarnivoreIfReachedMaxHungerRate(carnivore, carnivore.getHungerRate());
 
-            increaseHungerRate(carnivore);
-
+            reduceReproductionRate(herbivore, carnivore);
+            reproduceIfReproductionRateIsZero(carnivore, herbivore);
         }
+    }
+
+    private void reduceReproductionRate(Animal herbivore, Animal carnivore) {
+        int herbivoreReproductionRate = herbivore.getReproductionRate();
+        int carnivoreReproductionRate = carnivore.getReproductionRate();
+
+        herbivoreReproductionRate--;
+        carnivoreReproductionRate--;
+
+        herbivore.setReproductionRate(herbivoreReproductionRate);
+        carnivore.setReproductionRate(carnivoreReproductionRate);
+
     }
 
     private void attack(Animal herbivore, Animal carnivore) {
         int carnivoreHungerRate = carnivore.getHungerRate();
 
-        herbivoreRepository.removeHerbivore(herbivore);
+        removeHerbivore(herbivore);
+
 
         carnivoreHungerRate -= (herbivore.getWeight() / carnivore.getWeight()) / 100;
         carnivore.setHungerRate(carnivoreHungerRate);
@@ -88,6 +113,22 @@ public class EcoSystemService {
         decreaseHungerRateIfAnimalInGroup(herbivore, carnivore);
 
         increaseAge(herbivore, carnivore);
+    }
+
+    private void removeHerbivore(Animal herbivore) {
+        herbivoreRepository.removeHerbivore(herbivore);
+        herbivoreGroupRepository.getGroup(herbivore).remove(herbivore);
+    }
+
+    private void reproduceIfReproductionRateIsZero(Animal carnivore, Animal herbivore) {
+        if (carnivore.getReproductionRate() == 0) {
+            carnivoreRepository.addCarnivore(new Carnivore(carnivore.getAnimalType(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
+                    carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(), carnivore.getHungerRate()));
+        }
+        if (herbivore.getReproductionRate() == 0) {
+            herbivoreRepository.addHerbivore(new Herbivore(herbivore.getAnimalType(), herbivore.getMaxAge(), herbivore.getWeight(), herbivore.getReproductionRate(),
+                    herbivore.getGroupMembers(), herbivore.getHabitatType(), herbivore.getLivingStatus(), herbivore.getPoints()));
+        }
     }
 
     private void increaseHungerRate(Animal carnivore) {
@@ -106,6 +147,7 @@ public class EcoSystemService {
             }
             int hungerRate = carnivore.getHungerRate();
             hungerRate -= distributedWeight;
+            carnivore.setHungerRate(hungerRate);
         }
     }
 
@@ -123,13 +165,18 @@ public class EcoSystemService {
         if (carnivoreHungerRate >= maxHungerRate) {
             carnivoreRepository.removeCarnivore(carnivore);
         }
+        carnivoreGroupRepository.getGroup(carnivore).remove(carnivore);
     }
 
     private void increaseAge(Animal herbivore, Animal carnivore) {
         double carnivoreAge = carnivore.getAge();
         double herbivoreAge = herbivore.getAge();
+
         carnivoreAge++;
         herbivoreAge++;
+
+        carnivore.setAge(carnivoreAge);
+        herbivore.setAge(herbivoreAge);
     }
 
     private double reduceSuccessChanceByWeightRatio(Animal herbivore, Animal carnivore, double successChance) {
@@ -157,16 +204,6 @@ public class EcoSystemService {
         double attackPoints = carnivore.scalePoints(carnivore.getPoints());
 
         return (attackPoints / (attackPoints + escapePoints)) * 100;
-    }
-
-    private void makeGroup(Animal herbivore, Animal carnivore) {
-        if (herbivore.getLivingStatus().equals(LivingStatus.GROUP)) {
-            addHerbivoreToGroup(herbivore);
-        }
-
-        if (carnivore.getLivingStatus().equals(LivingStatus.GROUP)) {
-            addCarnivoreToGroup(carnivore);
-        }
     }
 
     private void addHerbivore(Animal animal) {

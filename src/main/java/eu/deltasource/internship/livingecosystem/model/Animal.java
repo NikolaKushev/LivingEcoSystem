@@ -31,6 +31,14 @@ public abstract class Animal {
         this.biomes = new ArrayList<>();
     }
 
+    public void setReproductionRate(int reproductionRate) {
+        this.reproductionRate = reproductionRate;
+    }
+
+    public void setAge(double age) {
+        this.age = age;
+    }
+
     public Animal(String animalType, double maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus) {
         this.animalType = animalType;
         this.age = new Random().nextInt(0, 5);
