@@ -106,18 +106,12 @@ public class EcoSystemService {
 
         removeHerbivore(herbivore);
 
-
         carnivoreHungerRate -= (herbivore.getWeight() / carnivore.getWeight()) / 100;
         carnivore.setHungerRate(carnivoreHungerRate);
 
         decreaseHungerRateIfAnimalInGroup(herbivore, carnivore);
 
         increaseAge(herbivore, carnivore);
-    }
-
-    private void removeHerbivore(Animal herbivore) {
-        herbivoreRepository.removeHerbivore(herbivore);
-        herbivoreGroupRepository.getGroup(herbivore).remove(herbivore);
     }
 
     private void reproduceIfReproductionRateIsZero(Animal carnivore, Animal herbivore) {
@@ -145,27 +139,33 @@ public class EcoSystemService {
                 decreaseHungerRateOfCarnivore(animal, distributedWeight);
                 carnivore.setHungerRate(animal.getHungerRate());
             }
-            int hungerRate = carnivore.getHungerRate();
-            hungerRate -= distributedWeight;
-            carnivore.setHungerRate(hungerRate);
+            decreaseHungerRate(carnivore, distributedWeight);
         }
     }
 
     private void decreaseHungerRateOfCarnivore(Animal carnivore, double distributedWeight) {
+        if (decreaseHungerRate(carnivore,distributedWeight) <= 0) {
+            carnivore.setHungerRate(0);
+        }
+    }
+
+    private int decreaseHungerRate(Animal carnivore, double distributedWeight) {
         int hungerRate = carnivore.getHungerRate();
         hungerRate -= distributedWeight;
         carnivore.setHungerRate(hungerRate);
-
-        if (hungerRate <= 0) {
-            carnivore.setHungerRate(0);
-        }
+        return hungerRate;
     }
 
     private void removeCarnivoreIfReachedMaxHungerRate(Animal carnivore, int carnivoreHungerRate) {
         if (carnivoreHungerRate >= maxHungerRate) {
             carnivoreRepository.removeCarnivore(carnivore);
+            carnivoreGroupRepository.getGroup(carnivore).remove(carnivore);
         }
-        carnivoreGroupRepository.getGroup(carnivore).remove(carnivore);
+    }
+
+    private void removeHerbivore(Animal herbivore) {
+        herbivoreRepository.removeHerbivore(herbivore);
+        herbivoreGroupRepository.getGroup(herbivore).remove(herbivore);
     }
 
     private void increaseAge(Animal herbivore, Animal carnivore) {
