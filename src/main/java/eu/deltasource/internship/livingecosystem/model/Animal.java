@@ -6,42 +6,22 @@ import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public abstract class Animal {
 
-    private double age;
-    private double maxAge;
-    private double weight;
+    private int age;
+    private int maxAge;
     private int reproductionRate;
     private int groupMembers;
+    private double weight;
     private String animalType;
     private HabitatType habitatType;
     private LivingStatus livingStatus;
     private List<Biome> biomes;
 
-    public Animal(String animalType, double maxAge, double weight, int reproductionRate, HabitatType habitatType, LivingStatus livingStatus) {
+    public Animal(String animalType, int maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus) {
         this.animalType = animalType;
-        this.age = new Random().nextInt(1, 5);
-        this.maxAge = maxAge;
-        this.weight = weight;
-        this.reproductionRate = reproductionRate;
-        this.habitatType = habitatType;
-        this.livingStatus = livingStatus;
-        this.biomes = new ArrayList<>();
-    }
-
-    public void setReproductionRate(int reproductionRate) {
-        this.reproductionRate = reproductionRate;
-    }
-
-    public void setAge(double age) {
-        this.age = age;
-    }
-
-    public Animal(String animalType, double maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus) {
-        this.animalType = animalType;
-        this.age = new Random().nextInt(0, 5);
+        this.age = 1;
         this.maxAge = maxAge;
         this.weight = weight;
         this.reproductionRate = reproductionRate;
@@ -50,8 +30,26 @@ public abstract class Animal {
         this.livingStatus = livingStatus;
     }
 
-    public double scalePoints(double points) {
-        return points * (1 - age / maxAge);
+    public void setReproductionRate(int reproductionRate) {
+        this.reproductionRate = reproductionRate;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "age=" + age +
+                ", maxAge=" + maxAge +
+                ", reproductionRate=" + reproductionRate +
+                ", groupMembers=" + groupMembers +
+                ", weight=" + weight +
+                ", animalType='" + animalType + '\'' +
+                ", habitatType=" + habitatType +
+                ", livingStatus=" + livingStatus +
+                '}';
     }
 
     public String getAnimalType() {
@@ -62,11 +60,11 @@ public abstract class Animal {
         return Collections.unmodifiableList(biomes);
     }
 
-    public double getAge() {
+    public int getAge() {
         return age;
     }
 
-    public double getMaxAge() {
+    public int getMaxAge() {
         return maxAge;
     }
 
@@ -94,5 +92,5 @@ public abstract class Animal {
 
     public abstract int getHungerRate();
 
-    public abstract double getPoints();
+    public abstract int getPoints();
 }

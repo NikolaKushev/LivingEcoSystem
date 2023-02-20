@@ -1,7 +1,6 @@
 package eu.deltasource.internship.livingecosystem.repository.carnivorerepository;
 
 import eu.deltasource.internship.livingecosystem.model.Animal;
-import eu.deltasource.internship.livingecosystem.repository.carnivorerepository.CarnivoreRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;

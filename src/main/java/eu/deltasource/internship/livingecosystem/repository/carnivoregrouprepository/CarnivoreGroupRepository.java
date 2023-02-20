@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface CarnivoreGroupRepository {
     void addGroup(Group group);
+    List<Group> getCarnivoreGroupList();
     List<Animal> getGroup(Animal animal);
-//    Optional<Group> getCarnivoreGroup(String name);
 }

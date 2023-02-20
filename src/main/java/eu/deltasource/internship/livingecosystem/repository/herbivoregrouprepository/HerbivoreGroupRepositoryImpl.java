@@ -4,14 +4,15 @@ import eu.deltasource.internship.livingecosystem.model.Animal;
 import eu.deltasource.internship.livingecosystem.model.Group;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HerbivoreGroupRepositoryImpl implements HerbivoreGroupRepository {
 
-    private List<Group> herbivoreGroupList;
+    private List<Group> herbivoreGroupList = new ArrayList<>();
 
-    public HerbivoreGroupRepositoryImpl() {
-        this.herbivoreGroupList = new ArrayList<>();
+    public List<Group> getHerbivoresList() {
+        return Collections.unmodifiableList(herbivoreGroupList);
     }
 
     public List<Animal> getGroup(Animal animal) {

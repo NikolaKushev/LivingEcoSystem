@@ -1,6 +1,5 @@
 package eu.deltasource.internship.livingecosystem;
 
-import eu.deltasource.internship.livingecosystem.model.Carnivore;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepository;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepositoryImpl;
 import eu.deltasource.internship.livingecosystem.repository.carnivorerepository.CarnivoreRepository;
@@ -9,16 +8,34 @@ import eu.deltasource.internship.livingecosystem.repository.herbivoregroupreposi
 import eu.deltasource.internship.livingecosystem.repository.herbivoregrouprepository.HerbivoreGroupRepositoryImpl;
 import eu.deltasource.internship.livingecosystem.repository.herbivorerepository.HerbivoreRepository;
 import eu.deltasource.internship.livingecosystem.repository.herbivorerepository.HerbivoreRepositoryImpl;
+import eu.deltasource.internship.livingecosystem.service.CarnivoreService;
+import eu.deltasource.internship.livingecosystem.service.EcoSystemService;
+import eu.deltasource.internship.livingecosystem.service.HerbivoreService;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.IOException;
+
+public class Simulation {
+    public static void main(String[] args) throws IOException {
+
         CarnivoreRepository carnivoreRepository = new CarnivoreRepositoryImpl();
-        HerbivoreRepository herbivoreRepository = new HerbivoreRepositoryImpl();
         CarnivoreGroupRepository carnivoreGroupRepository = new CarnivoreGroupRepositoryImpl();
-        HerbivoreGroupRepository herbivoreGroupRepository = new HerbivoreGroupRepositoryImpl();
+        CarnivoreService carnivoreService = new CarnivoreService(carnivoreRepository, carnivoreGroupRepository);
 
-        EcoSystemService ecoSystemService = new EcoSystemService(carnivoreRepository,herbivoreRepository,
-                carnivoreGroupRepository,herbivoreGroupRepository);
+        HerbivoreRepository herbivoreRepository = new HerbivoreRepositoryImpl();
+        HerbivoreGroupRepository herbivoreGroupRepository = new HerbivoreGroupRepositoryImpl();
+        HerbivoreService herbivoreService = new HerbivoreService(herbivoreRepository, herbivoreGroupRepository);
+
+        EcoSystemService ecoSystemService = new EcoSystemService(carnivoreService, herbivoreService);
+
+        ecoSystemService.createHerbivores(herbivoreService);
+        ecoSystemService.createCarnivores(carnivoreService);
+
         ecoSystemService.simulate();
     }
+
+
+
+
+
+
 }

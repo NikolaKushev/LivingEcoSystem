@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface HerbivoreGroupRepository {
     void addGroup(Group group);
+    List<Group> getHerbivoresList();
     List<Animal> getGroup(Animal animal);
 }

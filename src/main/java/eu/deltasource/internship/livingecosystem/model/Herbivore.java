@@ -5,15 +5,10 @@ import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 
 public class Herbivore extends Animal {
 
-    private double escapePoints;
+    private int escapePoints;
 
-    public Herbivore(String animalType, double maxAge, double weight, int reproductionRate, HabitatType habitatType, LivingStatus livingStatus, double escapePoints) {
-        super(animalType,maxAge, weight, reproductionRate, habitatType, livingStatus);
-        this.escapePoints = escapePoints;
-    }
-
-    public Herbivore(String animalType, double maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus, double escapePoints) {
-        super(animalType,maxAge, weight, reproductionRate, groupMembers, habitatType, livingStatus);
+    public Herbivore(String animalType, int maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus, int escapePoints) {
+        super(animalType, maxAge, weight, reproductionRate, groupMembers, habitatType, livingStatus);
         this.escapePoints = escapePoints;
     }
 
@@ -27,7 +22,7 @@ public class Herbivore extends Animal {
     }
 
     @Override
-    public double getPoints() {
+    public int getPoints() {
         return escapePoints;
     }
 }
