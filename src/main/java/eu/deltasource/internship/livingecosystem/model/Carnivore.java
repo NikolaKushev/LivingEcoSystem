@@ -5,14 +5,35 @@ import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 
 public class Carnivore extends Animal {
 
-    private int attackPoints;
+    private double attackPoints;
+    private int hungerLevel;
+
     private int hungerRate;
 
-    public Carnivore(String animalType, int maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType,
-                     LivingStatus livingStatus, int attackPoints, int hungerRate) {
-        super(animalType, maxAge, weight, reproductionRate, groupMembers, habitatType, livingStatus);
+    public Carnivore(String specie, int maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType,
+                     LivingStatus livingStatus, double attackPoints, int hungerLevel, int hungerRate) {
+        super(specie, maxAge, weight, reproductionRate, groupMembers, habitatType, livingStatus);
+        this.hungerLevel = 0;
         this.attackPoints = attackPoints;
         this.hungerRate = hungerRate;
+    }
+
+    public int getHungerLevel() {
+        return hungerLevel;
+    }
+
+    public void setHungerLevel(int hungerLevel) {
+        this.hungerLevel = hungerLevel;
+    }
+
+    @Override
+    public void setPoints(double points) {
+        this.attackPoints = points;
+    }
+
+    @Override
+    public double getPoints() {
+        return attackPoints;
     }
 
     @Override
@@ -23,10 +44,5 @@ public class Carnivore extends Animal {
     @Override
     public int getHungerRate() {
         return hungerRate;
-    }
-
-    @Override
-    public int getPoints() {
-        return attackPoints;
     }
 }

@@ -1,6 +1,6 @@
 package eu.deltasource.internship.livingecosystem.enums;
 
-public enum BiomType {
+public enum BiomeType {
     SAVANNA,
     TUNDRA;
 }

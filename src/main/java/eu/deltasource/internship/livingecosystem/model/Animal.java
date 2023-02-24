@@ -1,5 +1,6 @@
 package eu.deltasource.internship.livingecosystem.model;
 
+import eu.deltasource.internship.livingecosystem.enums.BiomeType;
 import eu.deltasource.internship.livingecosystem.enums.HabitatType;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 
@@ -11,6 +12,7 @@ public abstract class Animal {
 
     private int age;
     private int maxAge;
+    private final int originalReproductionRate;
     private int reproductionRate;
     private int groupMembers;
     private double weight;
@@ -28,6 +30,13 @@ public abstract class Animal {
         this.groupMembers = groupMembers;
         this.habitatType = habitatType;
         this.livingStatus = livingStatus;
+        this.originalReproductionRate = getReproductionRate();
+        this.biomes = new ArrayList<>();
+        biomes.add(new Biome(BiomeType.SAVANNA, HabitatType.LAND));
+    }
+
+    public int getOriginalReproductionRate() {
+        return originalReproductionRate;
     }
 
     public void setReproductionRate(int reproductionRate) {
@@ -38,18 +47,8 @@ public abstract class Animal {
         this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "Animal{" +
-                "age=" + age +
-                ", maxAge=" + maxAge +
-                ", reproductionRate=" + reproductionRate +
-                ", groupMembers=" + groupMembers +
-                ", weight=" + weight +
-                ", animalType='" + animalType + '\'' +
-                ", habitatType=" + habitatType +
-                ", livingStatus=" + livingStatus +
-                '}';
+    public void setBiomes(List<Biome> biomes) {
+        this.biomes = biomes;
     }
 
     public String getAnimalType() {
@@ -92,5 +91,7 @@ public abstract class Animal {
 
     public abstract int getHungerRate();
 
-    public abstract int getPoints();
+    public abstract double getPoints();
+
+    public abstract void setPoints(double points);
 }

@@ -1,5 +1,9 @@
 package eu.deltasource.internship.livingecosystem;
 
+import eu.deltasource.internship.livingecosystem.helper.HungerLevelCalculator;
+import eu.deltasource.internship.livingecosystem.helper.AgeCalculator;
+import eu.deltasource.internship.livingecosystem.helper.ReproductionRateCalculator;
+import eu.deltasource.internship.livingecosystem.helper.SuccessChanceCalculator;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepository;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepositoryImpl;
 import eu.deltasource.internship.livingecosystem.repository.carnivorerepository.CarnivoreRepository;
@@ -8,9 +12,7 @@ import eu.deltasource.internship.livingecosystem.repository.herbivoregroupreposi
 import eu.deltasource.internship.livingecosystem.repository.herbivoregrouprepository.HerbivoreGroupRepositoryImpl;
 import eu.deltasource.internship.livingecosystem.repository.herbivorerepository.HerbivoreRepository;
 import eu.deltasource.internship.livingecosystem.repository.herbivorerepository.HerbivoreRepositoryImpl;
-import eu.deltasource.internship.livingecosystem.service.CarnivoreService;
-import eu.deltasource.internship.livingecosystem.service.EcoSystemService;
-import eu.deltasource.internship.livingecosystem.service.HerbivoreService;
+import eu.deltasource.internship.livingecosystem.service.*;
 
 import java.io.IOException;
 
@@ -25,17 +27,19 @@ public class Simulation {
         HerbivoreGroupRepository herbivoreGroupRepository = new HerbivoreGroupRepositoryImpl();
         HerbivoreService herbivoreService = new HerbivoreService(herbivoreRepository, herbivoreGroupRepository);
 
-        EcoSystemService ecoSystemService = new EcoSystemService(carnivoreService, herbivoreService);
+        ReproductionRateCalculator reproductionRateCalculator = new ReproductionRateCalculator(carnivoreService, herbivoreService);
+        SuccessChanceCalculator successChanceCalculator = new SuccessChanceCalculator();
+        HungerLevelCalculator hungerLevelCalculator = new HungerLevelCalculator(carnivoreService);
+        AgeCalculator ageCalculator = new AgeCalculator(carnivoreService, herbivoreService);
 
-        ecoSystemService.createHerbivores(herbivoreService);
-        ecoSystemService.createCarnivores(carnivoreService);
+        EcoSystemService ecoSystemService = new EcoSystemService(carnivoreService, herbivoreService, reproductionRateCalculator,
+                successChanceCalculator, hungerLevelCalculator, ageCalculator);
 
-        ecoSystemService.simulate();
+        herbivoreService.createHerbivores(herbivoreService);
+        carnivoreService.createCarnivores(carnivoreService);
+
+        ecoSystemService.simulate(90);
     }
-
-
-
-
 
 
 }
