@@ -10,9 +10,8 @@ public class Carnivore extends Animal {
     private int hungerRate;
 
     public Carnivore(String specie, int maxAge, double weight, int reproductionRate, int groupMembers, LivingHabitat livingHabitat,
-                     LivingStatus livingStatus, double attackPoints, int hungerLevel, int hungerRate) {
+                     LivingStatus livingStatus, double attackPoints, int hungerRate) {
         super(specie, maxAge, weight, reproductionRate, groupMembers, livingHabitat, livingStatus);
-        this.hungerLevel = 0;
         this.attackPoints = attackPoints;
         this.hungerRate = hungerRate;
     }

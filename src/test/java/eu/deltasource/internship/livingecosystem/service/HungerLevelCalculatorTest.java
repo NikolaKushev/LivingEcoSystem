@@ -58,7 +58,7 @@ class HungerLevelCalculatorTest {
     public void testIncreaseOfHungerLevelAfterEachIteration(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         carnivoreService.addCarnivore(lion);
         carnivoreService.addCarnivoresToGroup(lion);
 
@@ -73,7 +73,7 @@ class HungerLevelCalculatorTest {
     public void testDecreaseHungerLevelOfCarnivoreIfAttackIsSuccessful(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion.setHungerLevel(50);
@@ -88,20 +88,20 @@ class HungerLevelCalculatorTest {
         //THEN
         assertEquals(49, lion.getHungerLevel());
     }
-//fix test
+
     @Test
     public void testDecreaseHungerLevelOfCarnivoreGroup(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
-        lion.setHungerLevel(70);
 
         carnivoreService.addCarnivore(lion);
         carnivoreService.addCarnivoresToGroup(lion);
         herbivoreService.addHerbivore(zebra);
         herbivoreService.addHerbivoresToGroup(zebra);
+        lion.setHungerLevel(70);
 
         //WHEN
         hungerLevelCalculator.decreaseHungerLevelIfCarnivoreInGroup(zebra, lion);

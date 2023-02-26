@@ -30,7 +30,7 @@ class CarnivoreServiceTest {
     public void testCreationOfCarnivore() {
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
 
         //WHEN
         carnivoreService.addCarnivore(lion);
@@ -43,7 +43,7 @@ class CarnivoreServiceTest {
     public void testRemoveCarnivoreFromCarnivoreRepository() {
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
         carnivoreService.addCarnivore(lion);
 
         //WHEN
@@ -57,7 +57,7 @@ class CarnivoreServiceTest {
     public void testRemoveCarnivoreIfReachedMaximumHungerLevel() {
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
         lion.setHungerLevel(100);
         carnivoreService.addCarnivore(lion);
 
@@ -72,7 +72,7 @@ class CarnivoreServiceTest {
     public void testRemoveCarnivoreIfReachedMaximumAge(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
         lion.setAge(30);
         carnivoreService.addCarnivore(lion);
 
@@ -87,7 +87,7 @@ class CarnivoreServiceTest {
     public void testRemoveCarnivoreFromCarnivoreGroupRepository(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
         carnivoreService.addCarnivoresToGroup(lion);
 
         //WHEN
@@ -101,7 +101,7 @@ class CarnivoreServiceTest {
     public void testAddCarnivoresToGroup(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
         carnivoreService.addCarnivore(lion);
 
         //WHEN

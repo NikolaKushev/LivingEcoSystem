@@ -64,7 +64,7 @@ class SuccessChanceCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 6, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80,0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80,20);
 
         //WHEN
         double successChance = successChanceCalculator.getSuccessChance(zebra, lion);
@@ -79,7 +79,7 @@ class SuccessChanceCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         cheetah = new Carnivore("cheetah", 30, 60, 5, 1,
-                LivingHabitat.LAND, LivingStatus.ALONE, 110,0, 15);
+                LivingHabitat.LAND, LivingStatus.ALONE, 110,15);
 
         //WHEN
         double successChance = successChanceCalculator.getSuccessChance(zebra, cheetah);
@@ -92,7 +92,7 @@ class SuccessChanceCalculatorTest {
     public void testCalculateSuccessChanceWhenCarnivoreAndHerbivoreAreAlone() {
         //GIVEN
         cheetah = new Carnivore("cheetah", 30, 60, 5, 1,
-                LivingHabitat.LAND, LivingStatus.ALONE, 110,0, 15);
+                LivingHabitat.LAND, LivingStatus.ALONE, 110,15);
         hare = new Herbivore("hare", 24, 5, 3, 1,
                 LivingHabitat.LAND, LivingStatus.ALONE, 100);
 

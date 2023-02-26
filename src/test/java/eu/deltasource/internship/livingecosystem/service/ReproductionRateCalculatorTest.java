@@ -51,7 +51,7 @@ class ReproductionRateCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
 
         //WHEN
         reproductionRateCalculator.reduceReproductionRate(zebra, lion);
@@ -67,7 +67,7 @@ class ReproductionRateCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         zebra.setReproductionRate(0);
         lion.setReproductionRate(0);
         carnivoreService.addCarnivore(lion);
@@ -87,7 +87,7 @@ class ReproductionRateCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         zebra.setReproductionRate(0);
         lion.setReproductionRate(0);
         carnivoreService.addCarnivore(lion);

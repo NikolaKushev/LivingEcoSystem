@@ -50,7 +50,7 @@ class AgeCalculatorTest {
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
                 LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 20);
         carnivoreService.addCarnivore(lion);
         herbivoreService.addHerbivore(zebra);
 

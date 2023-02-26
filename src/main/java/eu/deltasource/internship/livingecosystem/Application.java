@@ -88,12 +88,10 @@ public class Application {
             LivingHabitat carnivoreLivingHabitat = LivingHabitat.valueOf(values[5]);
             LivingStatus carnivoreLivingStatus = LivingStatus.valueOf(values[6]);
             int carnivoreAttackPoints = Integer.parseInt(values[7]);
-            int hungerLevel = Integer.parseInt(values[8]);
-            int hungerRate = Integer.parseInt(values[9]);
+            int hungerRate = Integer.parseInt(values[8]);
 
             Carnivore carnivore = new Carnivore(carnivoreSpecie, carnivoreMaxAge, carnivoreWeight, carnivoreReproductionRate,
-                    carnivoreGroupMembers, carnivoreLivingHabitat, carnivoreLivingStatus, carnivoreAttackPoints,
-                    hungerLevel, hungerRate);
+                    carnivoreGroupMembers, carnivoreLivingHabitat, carnivoreLivingStatus, carnivoreAttackPoints, hungerRate);
             carnivores = carnivoreService.addCarnivoreToCollection(carnivores, carnivore);
             carnivore.setBiomes(carnivore.getBiomes());
 

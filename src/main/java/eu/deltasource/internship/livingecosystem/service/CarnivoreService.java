@@ -84,8 +84,8 @@ public class CarnivoreService {
             group.addCarnivore(carnivore);
             for (int i = 0; i < carnivore.getGroupMembers() - 1; i++) {
                 group.addCarnivore(new Carnivore(carnivore.getSpecie(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
-                        carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(),
-                        carnivore.getHungerLevel(), carnivore.getHungerRate()));
+                        carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(),
+                        carnivore.getPoints(), carnivore.getHungerRate()));
             }
             carnivoreGroupRepository.addGroup(group);
         }

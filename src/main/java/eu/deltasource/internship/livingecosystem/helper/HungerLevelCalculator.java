@@ -34,9 +34,11 @@ public class HungerLevelCalculator {
     public void decreaseHungerLevelIfCarnivoreInGroup(Herbivore herbivore, Carnivore carnivore) {
         if (carnivore.getLivingStatus().equals(LivingStatus.GROUP)) {
             double distributedWeight = herbivore.getWeight() / (carnivore.getGroupMembers() + 1);
+            int hungerLevel = carnivore.getHungerLevel();
 
             List<Carnivore> animals = carnivoreService.getCarnivoreGroup(carnivore);
             for (Carnivore animal : animals) {
+                animal.setHungerLevel(hungerLevel);
                 checkIfHungerLevelLessThanZero(animal, distributedWeight);
                 carnivore.setHungerLevel(animal.getHungerLevel());
             }

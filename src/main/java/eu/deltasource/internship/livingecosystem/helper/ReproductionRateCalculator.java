@@ -30,8 +30,7 @@ public class ReproductionRateCalculator {
     public void reproduceIfReproductionRateIsZero(Carnivore carnivore, Herbivore herbivore) {
         if (carnivore.getReproductionRate() == 0) {
             carnivoreService.addCarnivore(new Carnivore(carnivore.getSpecie(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
-                    carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(),
-                    carnivore.getHungerLevel(), carnivore.getHungerRate()));
+                    carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(), carnivore.getHungerRate()));
             carnivore.setReproductionRate(carnivore.getOriginalReproductionRate());
             System.out.printf("New %s was born!\n", carnivore.getSpecie());
         }
