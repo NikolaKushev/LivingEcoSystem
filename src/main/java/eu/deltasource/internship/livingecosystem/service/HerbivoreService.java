@@ -1,6 +1,5 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.model.Animal;
 import eu.deltasource.internship.livingecosystem.model.Group;
@@ -9,10 +8,8 @@ import eu.deltasource.internship.livingecosystem.model.HerbivoreGroup;
 import eu.deltasource.internship.livingecosystem.repository.herbivoregrouprepository.HerbivoreGroupRepository;
 import eu.deltasource.internship.livingecosystem.repository.herbivorerepository.HerbivoreRepository;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,9 +27,19 @@ public class HerbivoreService {
         herbivoreRepository.addHerbivore(animal);
     }
 
-    public void removeHerbivore(Herbivore animal){
-        herbivoreRepository.removeHerbivore(animal);
-        getHerbivoreGroup(animal).remove(animal);
+    public void removeHerbivore(Herbivore herbivore){
+        herbivoreRepository.removeHerbivore(herbivore);
+        for (Group group : herbivoreGroupRepository.getHerbivoreGroupList()) {
+            if (group.getHerbivoreList().contains(herbivore)) {
+                for (int i = 0; i < herbivore.getGroupMembers(); i++) {
+                    group.removeHerbivore(group.getHerbivoreList().get(0));
+                }
+                if (group.getHerbivoreList().isEmpty()) {
+                    herbivoreGroupRepository.removeGroup(group);
+                }
+                return;
+            }
+        }
     }
 
     public List<Herbivore> getHerbivoresList() {
@@ -41,7 +48,14 @@ public class HerbivoreService {
 
     public List<Herbivore> getHerbivoreGroup(Herbivore animal) {
         List<Herbivore> animals = new ArrayList<>();
-        List<Group> groups = herbivoreGroupRepository.getHerbivoresList().stream().findAny().filter(a -> a.getAnimalType().equals(animal.getAnimalType())).stream().toList();
+        List<Group> groups = new ArrayList<>();
+
+        for (Group group : herbivoreGroupRepository.getHerbivoreGroupList()) {
+            if (group.getSpecie().equals(animal.getSpecie())) {
+                groups.add(group);
+            }
+        }
+
         for (Group group : groups) {
             List<Herbivore> animalList = group.getHerbivoreList();
             animals.addAll(animalList);
@@ -50,54 +64,27 @@ public class HerbivoreService {
         return animals;
     }
 
-    public void removeHerbivoreIfReachedMaxAge(Herbivore herbivore) {
+    public void removeHerbivoreIfDiedFromOldAge(Herbivore herbivore) {
         if (herbivore.getAge() >= herbivore.getMaxAge()) {
             removeHerbivore(herbivore);
-            getHerbivoreGroup(herbivore).remove(herbivore);
+            System.out.printf("%s reached it's max age and died.\n", herbivore.getSpecie());
         }
     }
 
-    public void addHerbivoreToGroup(Herbivore animal) {
+    public void addHerbivoresToGroup(Herbivore animal) {
         if (animal.getLivingStatus().equals(LivingStatus.GROUP)) {
-            Group group = new HerbivoreGroup(animal.getAnimalType());
+            Group group = new HerbivoreGroup(animal.getSpecie());
             group.addHerbivore(animal);
             for (int i = 0; i < animal.getGroupMembers()-1; i++) {
-                group.addHerbivore(new Herbivore(animal.getAnimalType(), animal.getMaxAge(), animal.getWeight(), animal.getReproductionRate(),
+                group.addHerbivore(new Herbivore(animal.getSpecie(), animal.getMaxAge(), animal.getWeight(), animal.getReproductionRate(),
                         animal.getGroupMembers(), animal.getHabitatType(), animal.getLivingStatus(), animal.getPoints()));
             }
             herbivoreGroupRepository.addGroup(group);
         }
     }
 
-    public void createHerbivores(HerbivoreService herbivoreService) throws IOException {
-        BufferedReader herbivoreBuffer = new BufferedReader(new FileReader("HerbivoreInfo.txt"));
-        String herbivoreInfo;
-
-        Animal[] herbivores = new Herbivore[0];
-        while ((herbivoreInfo = herbivoreBuffer.readLine()) != null) {
-            String[] values = herbivoreInfo.split("-");
-            String herbivoreSpecie = values[0];
-            int herbivoreMaxAge = Integer.parseInt(values[1]);
-            double herbivoreWeight = Double.parseDouble(values[2]);
-            int herbivoreReproductionRate = Integer.parseInt(values[3]);
-            int herbivoreGroupMembers = Integer.parseInt(values[4]);
-            HabitatType herbivoreHabitatType = HabitatType.valueOf(values[5]);
-            LivingStatus herbivoreLivingStatus = LivingStatus.valueOf(values[6]);
-            int herbivoreEscapePoints = Integer.parseInt(values[7]);
-
-            Herbivore herbivore = new Herbivore(herbivoreSpecie, herbivoreMaxAge, herbivoreWeight, herbivoreReproductionRate,
-                    herbivoreGroupMembers, herbivoreHabitatType, herbivoreLivingStatus, herbivoreEscapePoints);
-            herbivores = addHerbivore(herbivores, herbivore);
-            herbivore.setBiomes(herbivore.getBiomes());
-
-            herbivoreService.addHerbivore(herbivore);
-            herbivoreService.addHerbivoreToGroup(herbivore);
-        }
-    }
-
-    private Animal[] addHerbivore(Animal[] animals, Animal animalToAdd) {
-        Animal[] newAnimals = new Herbivore[animals.length + 1];
-        System.arraycopy(animals, 0, newAnimals, 0, animals.length);
+    public Animal[] addHerbivoreToCollection(Animal[] animals, Animal animalToAdd) {
+        Animal[] newAnimals = Arrays.copyOf(animals, animals.length + 1);
         newAnimals[newAnimals.length - 1] = animalToAdd;
 
         return newAnimals;

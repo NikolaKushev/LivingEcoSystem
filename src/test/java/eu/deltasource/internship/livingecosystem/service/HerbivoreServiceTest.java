@@ -1,9 +1,7 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
-import eu.deltasource.internship.livingecosystem.model.Animal;
-import eu.deltasource.internship.livingecosystem.model.Carnivore;
 import eu.deltasource.internship.livingecosystem.model.Herbivore;
 import eu.deltasource.internship.livingecosystem.repository.herbivoregrouprepository.HerbivoreGroupRepository;
 import eu.deltasource.internship.livingecosystem.repository.herbivoregrouprepository.HerbivoreGroupRepositoryImpl;
@@ -31,66 +29,70 @@ class HerbivoreServiceTest {
     @Test
     public void testCreationOfHerbivore() {
         //GIVEN
-        String herbivoreInfo = "zebra-50-300-10-5-LAND-GROUP-80";
-        String[] values = herbivoreInfo.split("-");
-        String herbivoreSpecie = values[0];
-        int herbivoreMaxAge = Integer.parseInt(values[1]);
-        double herbivoreWeight = Double.parseDouble(values[2]);
-        int herbivoreReproductionRate = Integer.parseInt(values[3]);
-        int herbivoreGroupMembers = Integer.parseInt(values[4]);
-        HabitatType herbivoreHabitatType = HabitatType.valueOf(values[5]);
-        LivingStatus herbivoreLivingStatus = LivingStatus.valueOf(values[6]);
-        int herbivoreEscapePoints = Integer.parseInt(values[7]);
+        zebra = new Herbivore("zebra", 50, 300, 10, 5,
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
 
-        Herbivore herbivore = new Herbivore(herbivoreSpecie, herbivoreMaxAge, herbivoreWeight, herbivoreReproductionRate,
-                herbivoreGroupMembers, herbivoreHabitatType, herbivoreLivingStatus, herbivoreEscapePoints);
         //WHEN
-        herbivoreRepository.addHerbivore(herbivore);
+        herbivoreRepository.addHerbivore(zebra);
 
         //THEN
         assertEquals(1, herbivoreRepository.getHerbivoresList().size());
     }
 
     @Test
-    public void testRemoveHerbivoreFromCarnivoreRepository() {
+    public void testRemoveHerbivoreFromHerbivoreRepository() {
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         herbivoreService.addHerbivore(zebra);
 
         //WHEN
         herbivoreService.removeHerbivore(zebra);
 
         //THEN
-        assertEquals(0, herbivoreService.getHerbivoresList().size());
+        assertEquals(0, herbivoreRepository.getHerbivoresList().size());
     }
 
     @Test
     public void testRemoveHerbivoreIfReachedMaximumAge(){
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         zebra.setAge(50);
         herbivoreService.addHerbivore(zebra);
 
         //WHEN
-        herbivoreService.removeHerbivoreIfReachedMaxAge(zebra);
+        herbivoreService.removeHerbivoreIfDiedFromOldAge(zebra);
 
         //THEN
-        assertEquals(0, herbivoreService.getHerbivoresList().size());
+        assertEquals(0, herbivoreRepository.getHerbivoresList().size());
+    }
+
+    @Test
+    public void testRemoveHerbivoreFromHerbivoreGroupRepository(){
+        //GIVEN
+        zebra = new Herbivore("zebra", 50, 300, 10, 5,
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
+        herbivoreService.addHerbivoresToGroup(zebra);
+
+        //WHEN
+        herbivoreService.removeHerbivore(zebra);
+
+        //THEN
+        assertEquals(0, herbivoreGroupRepository.getHerbivoreGroupList().size());
     }
 
     @Test
     public void testAddHerbivoreToGroup(){
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         herbivoreService.addHerbivore(zebra);
 
         //WHEN
-        herbivoreService.addHerbivoreToGroup(zebra);
+        herbivoreService.addHerbivoresToGroup(zebra);
 
         //THEN
-        assertEquals(1, herbivoreGroupRepository.getHerbivoresList().size());
+        assertEquals(1, herbivoreGroupRepository.getHerbivoreGroupList().size());
     }
 }

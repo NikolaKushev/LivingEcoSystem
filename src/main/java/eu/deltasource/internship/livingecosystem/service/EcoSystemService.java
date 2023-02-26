@@ -12,12 +12,12 @@ import java.util.Random;
 //TODO fix uml diagram for demo.
 public class EcoSystemService {
 
-    CarnivoreService carnivoreService;
-    HerbivoreService herbivoreService;
-    ReproductionRateCalculator reproductionRateCalculator;
-    SuccessChanceCalculator successChanceCalculator;
-    HungerLevelCalculator hungerLevelCalculator;
-    AgeCalculator ageCalculator;
+    private final CarnivoreService carnivoreService;
+    private final HerbivoreService herbivoreService;
+    private final ReproductionRateCalculator reproductionRateCalculator;
+    private final SuccessChanceCalculator successChanceCalculator;
+    private final HungerLevelCalculator hungerLevelCalculator;
+    private final AgeCalculator ageCalculator;
 
     public EcoSystemService(CarnivoreService carnivoreService, HerbivoreService herbivoreService,
                             ReproductionRateCalculator reproductionRateCalculator, SuccessChanceCalculator successChanceCalculator,
@@ -30,9 +30,10 @@ public class EcoSystemService {
         this.herbivoreService = herbivoreService;
     }
 
-    public void simulate(int randomSuccessChance) {
+    public void simulateEcoSystem() {
         while (true) {
             if (herbivoreService.getHerbivoresList().size() == 0 || carnivoreService.getCarnivoresList().size() == 0) {
+                System.out.println("No animals left!");
                 break;
             }
 
@@ -41,30 +42,29 @@ public class EcoSystemService {
 
             double successChance = successChanceCalculator.getSuccessChance(herbivore, carnivore);
 
+            int randomSuccessChance = new Random().nextInt(0, 100);
+
             if (successChance > randomSuccessChance) {
-                attack(herbivore, carnivore);
+                initiateAttack(herbivore, carnivore);
+            } else {
+                System.out.printf("%s escaped from %s\n", herbivore.getSpecie(), carnivore.getSpecie());
             }
-
             ageCalculator.increaseAge();
-
-            carnivoreService.removeCarnivoreIfReachedMaxHungerRate(carnivore, carnivore.getHungerRate());
-
-            herbivoreService.removeHerbivoreIfReachedMaxAge(herbivore);
-            carnivoreService.removeCarnivoreIfReachedMaxAge(carnivore);
-
+            carnivoreService.removeCarnivoreIfStarving(carnivore);
+            herbivoreService.removeHerbivoreIfDiedFromOldAge(herbivore);
+            carnivoreService.removeCarnivoreIfDiedFromOldAge(carnivore);
             hungerLevelCalculator.increaseHungerLevel(carnivore);
             reproductionRateCalculator.reduceReproductionRate(herbivore, carnivore);
             reproductionRateCalculator.reproduceIfReproductionRateIsZero(carnivore, herbivore);
         }
     }
 
-    private void attack(Herbivore herbivore, Carnivore carnivore) {
-        int carnivoreHungerRate = carnivore.getHungerRate();
+    private void initiateAttack(Herbivore herbivore, Carnivore carnivore) {
+        int carnivoreHungerLevel = carnivore.getHungerLevel();
+        System.out.printf("%s killed %s\n", carnivore.getSpecie(), herbivore.getSpecie());
 
         herbivoreService.removeHerbivore(herbivore);
-
-        hungerLevelCalculator.decreaseHungerLevelOfCarnivore(herbivore, carnivore, carnivoreHungerRate);
-
-        hungerLevelCalculator.decreaseHungerRateIfCarnivoreInGroup(herbivore, carnivore);
+        hungerLevelCalculator.decreaseHungerLevelOfCarnivore(herbivore, carnivore, carnivoreHungerLevel);
+        hungerLevelCalculator.decreaseHungerLevelIfCarnivoreInGroup(herbivore, carnivore);
     }
 }

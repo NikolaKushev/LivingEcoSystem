@@ -11,7 +11,7 @@ public class HerbivoreGroupRepositoryImpl implements HerbivoreGroupRepository {
 
     private List<Group> herbivoreGroupList = new ArrayList<>();
 
-    public List<Group> getHerbivoresList() {
+    public List<Group> getHerbivoreGroupList() {
         return Collections.unmodifiableList(herbivoreGroupList);
     }
 
@@ -19,4 +19,11 @@ public class HerbivoreGroupRepositoryImpl implements HerbivoreGroupRepository {
     public void addGroup(Group group) {
         herbivoreGroupList.add(group);
     }
+
+    @Override
+    public void removeGroup(Group groups) {
+        herbivoreGroupList.remove(groups);
+    }
+
+
 }

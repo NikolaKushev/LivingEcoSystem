@@ -1,6 +1,6 @@
 package eu.deltasource.internship.livingecosystem.enums;
 
-public enum HabitatType {
+public enum LivingHabitat {
     LAND,
     WATER,
     AIR;

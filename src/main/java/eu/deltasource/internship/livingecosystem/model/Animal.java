@@ -1,7 +1,7 @@
 package eu.deltasource.internship.livingecosystem.model;
 
 import eu.deltasource.internship.livingecosystem.enums.BiomeType;
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 
 import java.util.ArrayList;
@@ -16,23 +16,23 @@ public abstract class Animal {
     private int reproductionRate;
     private int groupMembers;
     private double weight;
-    private String animalType;
-    private HabitatType habitatType;
+    private String specie;
+    private LivingHabitat livingHabitat;
     private LivingStatus livingStatus;
     private List<Biome> biomes;
 
-    public Animal(String animalType, int maxAge, double weight, int reproductionRate, int groupMembers, HabitatType habitatType, LivingStatus livingStatus) {
-        this.animalType = animalType;
+    public Animal(String specie, int maxAge, double weight, int reproductionRate, int groupMembers, LivingHabitat livingHabitat, LivingStatus livingStatus) {
+        this.specie = specie;
         this.age = 1;
         this.maxAge = maxAge;
         this.weight = weight;
         this.reproductionRate = reproductionRate;
         this.groupMembers = groupMembers;
-        this.habitatType = habitatType;
+        this.livingHabitat = livingHabitat;
         this.livingStatus = livingStatus;
         this.originalReproductionRate = getReproductionRate();
         this.biomes = new ArrayList<>();
-        biomes.add(new Biome(BiomeType.SAVANNA, HabitatType.LAND));
+        biomes.add(new Biome(BiomeType.SAVANNA, LivingHabitat.LAND));
     }
 
     public int getOriginalReproductionRate() {
@@ -51,8 +51,8 @@ public abstract class Animal {
         this.biomes = biomes;
     }
 
-    public String getAnimalType() {
-        return animalType;
+    public String getSpecie() {
+        return specie;
     }
 
     public List<Biome> getBiomes() {
@@ -79,17 +79,13 @@ public abstract class Animal {
         return groupMembers;
     }
 
-    public HabitatType getHabitatType() {
-        return habitatType;
+    public LivingHabitat getHabitatType() {
+        return livingHabitat;
     }
 
     public LivingStatus getLivingStatus() {
         return livingStatus;
     }
-
-    public abstract void setHungerRate(int hungerRate);
-
-    public abstract int getHungerRate();
 
     public abstract double getPoints();
 

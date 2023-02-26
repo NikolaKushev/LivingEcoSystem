@@ -2,17 +2,19 @@ package eu.deltasource.internship.livingecosystem.helper;
 
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.model.Animal;
+import eu.deltasource.internship.livingecosystem.model.Carnivore;
+import eu.deltasource.internship.livingecosystem.model.Herbivore;
 
 public class SuccessChanceCalculator {
 
-    public double getSuccessChance(Animal herbivore, Animal carnivore) {
+    public double getSuccessChance(Herbivore herbivore, Carnivore carnivore) {
         double successChance = calculateSuccessChanceForAttack(herbivore, carnivore);
 
         successChance = reduceSuccessChanceByWeightRatio(herbivore, carnivore, successChance);
         return successChance;
     }
 
-    private double calculateSuccessChanceForAttack(Animal herbivore, Animal carnivore) {
+    private double calculateSuccessChanceForAttack(Herbivore herbivore, Carnivore carnivore) {
         double successChance = calculateSuccessChance(herbivore, carnivore);
 
         if (herbivore.getLivingStatus().equals(LivingStatus.GROUP)) {
@@ -34,10 +36,10 @@ public class SuccessChanceCalculator {
         if (herbivore.getWeight() > carnivore.getWeight() && carnivore.getLivingStatus().equals(LivingStatus.ALONE)) {
             successChance /= herbivore.getWeight() / carnivore.getWeight();
         }
-        return successChance;
+        return Math.round(successChance * 100.0) / 100.0;
     }
 
-    private double calculateSuccessChance(Animal herbivore, Animal carnivore) {
+    private double calculateSuccessChance(Herbivore herbivore, Carnivore carnivore) {
         double escapePoints = herbivore.getPoints();
         double attackPoints = carnivore.getPoints();
         double successChance = (attackPoints / (attackPoints + escapePoints)) * 100;

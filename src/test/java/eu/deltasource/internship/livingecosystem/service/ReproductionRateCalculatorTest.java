@@ -1,9 +1,8 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.helper.ReproductionRateCalculator;
-import eu.deltasource.internship.livingecosystem.model.Animal;
 import eu.deltasource.internship.livingecosystem.model.Carnivore;
 import eu.deltasource.internship.livingecosystem.model.Herbivore;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepository;
@@ -50,9 +49,9 @@ class ReproductionRateCalculatorTest {
     public void testReduceReproductionRateAfterEachIteration() {
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
 
         //WHEN
         reproductionRateCalculator.reduceReproductionRate(zebra, lion);
@@ -66,9 +65,9 @@ class ReproductionRateCalculatorTest {
     public void testReproduceAnimalIfReproductionRateIsZero() {
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         zebra.setReproductionRate(0);
         lion.setReproductionRate(0);
         carnivoreService.addCarnivore(lion);
@@ -86,9 +85,9 @@ class ReproductionRateCalculatorTest {
     public void testIsReproductionSetToItsOriginalAfterReproduction() {
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         zebra.setReproductionRate(0);
         lion.setReproductionRate(0);
         carnivoreService.addCarnivore(lion);

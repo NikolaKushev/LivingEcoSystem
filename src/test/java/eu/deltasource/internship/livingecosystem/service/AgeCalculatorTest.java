@@ -1,9 +1,8 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.helper.AgeCalculator;
-import eu.deltasource.internship.livingecosystem.model.Animal;
 import eu.deltasource.internship.livingecosystem.model.Carnivore;
 import eu.deltasource.internship.livingecosystem.model.Herbivore;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepository;
@@ -49,9 +48,9 @@ class AgeCalculatorTest {
     public void testIsAgeIncreasedAfterEachIteration() {
         //GIVEN
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         carnivoreService.addCarnivore(lion);
         herbivoreService.addHerbivore(zebra);
 

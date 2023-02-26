@@ -1,16 +1,16 @@
 package eu.deltasource.internship.livingecosystem.model;
 
 import eu.deltasource.internship.livingecosystem.enums.BiomeType;
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 
 public class Biome {
 
     private BiomeType biomeType;
-    private HabitatType habitatType;
+    private LivingHabitat livingHabitat;
 
-    public Biome(BiomeType biomeType, HabitatType habitatType) {
+    public Biome(BiomeType biomeType, LivingHabitat livingHabitat) {
         this.biomeType = biomeType;
-        this.habitatType = habitatType;
+        this.livingHabitat = livingHabitat;
     }
 }
 

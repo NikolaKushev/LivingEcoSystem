@@ -29,16 +29,17 @@ public class ReproductionRateCalculator {
 
     public void reproduceIfReproductionRateIsZero(Carnivore carnivore, Herbivore herbivore) {
         if (carnivore.getReproductionRate() == 0) {
-            carnivoreService.addCarnivore(new Carnivore(carnivore.getAnimalType(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
+            carnivoreService.addCarnivore(new Carnivore(carnivore.getSpecie(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
                     carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(),
                     carnivore.getHungerLevel(), carnivore.getHungerRate()));
-            }
+            carnivore.setReproductionRate(carnivore.getOriginalReproductionRate());
+            System.out.printf("New %s was born!\n", carnivore.getSpecie());
+        }
         if (herbivore.getReproductionRate() == 0) {
-            herbivoreService.addHerbivore(new Herbivore(herbivore.getAnimalType(), herbivore.getMaxAge(), herbivore.getWeight(), herbivore.getReproductionRate(),
+            herbivoreService.addHerbivore(new Herbivore(herbivore.getSpecie(), herbivore.getMaxAge(), herbivore.getWeight(), herbivore.getReproductionRate(),
                     herbivore.getGroupMembers(), herbivore.getHabitatType(), herbivore.getLivingStatus(), herbivore.getPoints()));
-            }
-
-        carnivore.setReproductionRate(carnivore.getOriginalReproductionRate());
-        herbivore.setReproductionRate(herbivore.getOriginalReproductionRate());
+            herbivore.setReproductionRate(herbivore.getOriginalReproductionRate());
+            System.out.printf("New %s was born!\n", herbivore.getSpecie());
+        }
     }
 }

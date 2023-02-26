@@ -8,12 +8,12 @@ public abstract class Group {
 
     private List<Carnivore> carnivoreList;
     private List<Herbivore> herbivoreList;
-    private String animalType;
+    private String specie;
 
-    public Group(String animalType) {
+    public Group(String specie) {
         this.carnivoreList = new ArrayList<>();
         this.herbivoreList = new ArrayList<>();
-        this.animalType = animalType;
+        this.specie = specie;
     }
 
     public List<Carnivore> getCarnivoreList() {
@@ -24,6 +24,14 @@ public abstract class Group {
         carnivoreList.add(animal);
     }
 
+    public void removeCarnivore(Carnivore carnivore){
+        carnivoreList.remove(carnivore);
+    }
+
+    public void removeHerbivore(Herbivore herbivore){
+        herbivoreList.remove(herbivore);
+    }
+
     public List<Herbivore> getHerbivoreList() {
         return Collections.unmodifiableList(herbivoreList);
     }
@@ -32,11 +40,7 @@ public abstract class Group {
         herbivoreList.add(animal);
     }
 
-    public String getAnimalType() {
-        return animalType;
-    }
-
-    public void setAnimalType(String animalType) {
-        this.animalType = animalType;
+    public String getSpecie() {
+        return specie;
     }
 }

@@ -1,6 +1,6 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
+import eu.deltasource.internship.livingecosystem.enums.LivingHabitat;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.helper.AgeCalculator;
 import eu.deltasource.internship.livingecosystem.helper.HungerLevelCalculator;
@@ -58,9 +58,9 @@ class HungerLevelCalculatorTest {
     public void testIncreaseOfHungerLevelAfterEachIteration(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         carnivoreService.addCarnivore(lion);
-        carnivoreService.addCarnivoreToGroup(lion);
+        carnivoreService.addCarnivoresToGroup(lion);
 
         //WHEN
         hungerLevelCalculator.increaseHungerLevel(lion);
@@ -73,14 +73,14 @@ class HungerLevelCalculatorTest {
     public void testDecreaseHungerLevelOfCarnivoreIfAttackIsSuccessful(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion.setHungerLevel(50);
         carnivoreService.addCarnivore(lion);
-        carnivoreService.addCarnivoreToGroup(lion);
+        carnivoreService.addCarnivoresToGroup(lion);
         herbivoreService.addHerbivore(zebra);
-        herbivoreService.addHerbivoreToGroup(zebra);
+        herbivoreService.addHerbivoresToGroup(zebra);
 
         //WHEN
         hungerLevelCalculator.decreaseHungerLevelOfCarnivore(zebra, lion, lion.getHungerLevel());
@@ -93,18 +93,18 @@ class HungerLevelCalculatorTest {
     public void testDecreaseHungerLevelOfCarnivoreGroup(){
         //GIVEN
         lion = new Carnivore("lion", 30, 150, 5, 4,
-                HabitatType.LAND, LivingStatus.GROUP, 80, 0, 20);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80, 0, 20);
         zebra = new Herbivore("zebra", 50, 300, 10, 5,
-                HabitatType.LAND, LivingStatus.GROUP, 80);
+                LivingHabitat.LAND, LivingStatus.GROUP, 80);
         lion.setHungerLevel(70);
 
         carnivoreService.addCarnivore(lion);
-        carnivoreService.addCarnivoreToGroup(lion);
+        carnivoreService.addCarnivoresToGroup(lion);
         herbivoreService.addHerbivore(zebra);
-        herbivoreService.addHerbivoreToGroup(zebra);
+        herbivoreService.addHerbivoresToGroup(zebra);
 
         //WHEN
-        hungerLevelCalculator.decreaseHungerRateIfCarnivoreInGroup(zebra, lion);
+        hungerLevelCalculator.decreaseHungerLevelIfCarnivoreInGroup(zebra, lion);
 
         //THEN
         assertEquals(10, lion.getHungerLevel());

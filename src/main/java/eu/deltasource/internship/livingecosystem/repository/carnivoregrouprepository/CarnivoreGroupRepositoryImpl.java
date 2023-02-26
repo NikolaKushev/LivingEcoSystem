@@ -20,4 +20,10 @@ public class CarnivoreGroupRepositoryImpl implements CarnivoreGroupRepository {
         carnivoreGroupList.add(group);
     }
 
+    @Override
+    public void removeGroup(Group group) {
+        carnivoreGroupList.remove(group);
+    }
+
+
 }

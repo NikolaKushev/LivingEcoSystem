@@ -23,7 +23,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Simulation {
+public class Application {
     public static void main(String[] args) throws IOException {
 
         CarnivoreRepository carnivoreRepository = new CarnivoreRepositoryImpl();

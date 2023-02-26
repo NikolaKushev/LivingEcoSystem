@@ -1,6 +1,5 @@
 package eu.deltasource.internship.livingecosystem.service;
 
-import eu.deltasource.internship.livingecosystem.enums.HabitatType;
 import eu.deltasource.internship.livingecosystem.enums.LivingStatus;
 import eu.deltasource.internship.livingecosystem.model.Animal;
 import eu.deltasource.internship.livingecosystem.model.Carnivore;
@@ -9,10 +8,8 @@ import eu.deltasource.internship.livingecosystem.model.Group;
 import eu.deltasource.internship.livingecosystem.repository.carnivoregrouprepository.CarnivoreGroupRepository;
 import eu.deltasource.internship.livingecosystem.repository.carnivorerepository.CarnivoreRepository;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,31 +27,49 @@ public class CarnivoreService {
         carnivoreRepository.addCarnivore(animal);
     }
 
-    public void removeCarnivore(Carnivore carnivore){
+    public void removeCarnivore(Carnivore carnivore) {
         carnivoreRepository.removeCarnivore(carnivore);
-        getCarnivoreGroup(carnivore).remove(carnivore);
+        for (Group group : carnivoreGroupRepository.getCarnivoreGroupList()) {
+            if (group.getCarnivoreList().contains(carnivore)) {
+                for (int i = 0; i < carnivore.getGroupMembers(); i++) {
+                    group.removeCarnivore(group.getCarnivoreList().get(0));
+                }
+                if (group.getCarnivoreList().isEmpty()) {
+                    carnivoreGroupRepository.removeGroup(group);
+                }
+                return;
+            }
+        }
     }
 
     public List<Carnivore> getCarnivoresList() {
         return Collections.unmodifiableList(carnivoreRepository.getCarnivoresList());
     }
 
-    public void removeCarnivoreIfReachedMaxHungerRate(Carnivore carnivore, int carnivoreHungerRate) {
-        int maxHungerRate = 100;
-        if (carnivoreHungerRate >= maxHungerRate) {
+    public void removeCarnivoreIfStarving(Carnivore carnivore) {
+        if (carnivore.getHungerLevel() >= 100) {
             removeCarnivore(carnivore);
+            System.out.printf("%s died from starvation.\n", carnivore.getSpecie());
         }
     }
 
-    public void removeCarnivoreIfReachedMaxAge(Carnivore carnivore) {
+    public void removeCarnivoreIfDiedFromOldAge(Carnivore carnivore) {
         if (carnivore.getAge() >= carnivore.getMaxAge()) {
             removeCarnivore(carnivore);
+            System.out.printf("%s reached it's max age and died.\n", carnivore.getSpecie());
         }
     }
 
     public List<Carnivore> getCarnivoreGroup(Carnivore carnivore) {
         List<Carnivore> animals = new ArrayList<>();
-        List<Group> groups = carnivoreGroupRepository.getCarnivoreGroupList().stream().findAny().filter(a -> a.getAnimalType().equals(carnivore.getAnimalType())).stream().toList();
+        List<Group> groups = new ArrayList<>();
+
+        for (Group group : carnivoreGroupRepository.getCarnivoreGroupList()) {
+            if (group.getSpecie().equals(carnivore.getSpecie())) {
+                groups.add(group);
+            }
+        }
+
         for (Group group : groups) {
             List<Carnivore> animalList = group.getCarnivoreList();
             animals.addAll(animalList);
@@ -63,12 +78,12 @@ public class CarnivoreService {
         return animals;
     }
 
-    public void addCarnivoreToGroup(Carnivore carnivore) {
+    public void addCarnivoresToGroup(Carnivore carnivore) {
         if (carnivore.getLivingStatus().equals(LivingStatus.GROUP)) {
-            Group group = new CarnivoreGroup(carnivore.getAnimalType());
+            Group group = new CarnivoreGroup(carnivore.getSpecie());
             group.addCarnivore(carnivore);
-            for (int i = 0; i < carnivore.getGroupMembers()-1; i++) {
-                group.addCarnivore(new Carnivore(carnivore.getAnimalType(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
+            for (int i = 0; i < carnivore.getGroupMembers() - 1; i++) {
+                group.addCarnivore(new Carnivore(carnivore.getSpecie(), carnivore.getMaxAge(), carnivore.getWeight(), carnivore.getReproductionRate(),
                         carnivore.getGroupMembers(), carnivore.getHabitatType(), carnivore.getLivingStatus(), carnivore.getPoints(),
                         carnivore.getHungerLevel(), carnivore.getHungerRate()));
             }
@@ -76,37 +91,8 @@ public class CarnivoreService {
         }
     }
 
-    public void createCarnivores(CarnivoreService carnivoreService) throws IOException {
-        Animal[] carnivores = new Carnivore[0];
-        BufferedReader carnivoreBuffer = new BufferedReader(new FileReader("CarnivoreInfo.txt"));
-        String carnivoreInfo;
-        while ((carnivoreInfo = carnivoreBuffer.readLine()) != null) {
-            String[] values = carnivoreInfo.split("-");
-            String carnivoreSpecie = values[0];
-            int carnivoreMaxAge = Integer.parseInt(values[1]);
-            double carnivoreWeight = Double.parseDouble(values[2]);
-            int carnivoreReproductionRate = Integer.parseInt(values[3]);
-            int carnivoreGroupMembers = Integer.parseInt(values[4]);
-            HabitatType carnivoreHabitatType = HabitatType.valueOf(values[5]);
-            LivingStatus carnivoreLivingStatus = LivingStatus.valueOf(values[6]);
-            int carnivoreAttackPoints = Integer.parseInt(values[7]);
-            int hungerLevel = Integer.parseInt(values[8]);
-            int hungerRate = Integer.parseInt(values[9]);
-
-            Carnivore carnivore = new Carnivore(carnivoreSpecie, carnivoreMaxAge, carnivoreWeight, carnivoreReproductionRate,
-                    carnivoreGroupMembers, carnivoreHabitatType, carnivoreLivingStatus, carnivoreAttackPoints,
-                    hungerLevel, hungerRate);
-            carnivores = addCarnivore(carnivores, carnivore);
-            carnivore.setBiomes(carnivore.getBiomes());
-
-            carnivoreService.addCarnivore(carnivore);
-            carnivoreService.addCarnivoreToGroup(carnivore);
-        }
-    }
-
-    private Animal[] addCarnivore(Animal[] animals, Animal animalToAdd) {
-        Animal[] newAnimals = new Carnivore[animals.length + 1];
-        System.arraycopy(animals, 0, newAnimals, 0, animals.length);
+    public Animal[] addCarnivoreToCollection(Animal[] animals, Animal animalToAdd) {
+        Animal[] newAnimals = Arrays.copyOf(animals, animals.length + 1);
         newAnimals[newAnimals.length - 1] = animalToAdd;
 
         return newAnimals;
